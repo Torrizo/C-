@@ -1,565 +1,159 @@
-#ifndef _RB_TREE_H_
-#define _RB_TREE_H_
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <fstream>
-
+#include<iostream>
+#include<set>
+#include<functional>
 using namespace std;
-
-enum NodeColor
+template <class T>
+void printSet(const set<T>& set)
 {
-	RED,
-	BLACK
-};
-
-template<class KEY, class VALUE>
-class RB_Node	//结点类
-{
-public:
-	RB_Node()	//节点类构造
+	for (const auto& e : set)
 	{
-		right = NULL;
-		left = NULL;
-		parent = NULL;
+		cout << e << " ";
 	}
-	NodeColor RB_COLOR;	//颜色
-	RB_Node<KEY, VALUE>* right;	//右子树
-	RB_Node<KEY, VALUE>* left;	//左子树
-	RB_Node<KEY, VALUE>* parent;	//父结点
-	KEY key;	//键
-	VALUE val;	//值
-};
-
-template<class KEY, class VALUE>
-class RB_Tree
-{
-	//RB树类
-private:
-	RB_Tree(const RB_Tree & input){}
-	const RB_Tree& operator=(const RB_Tree& input){}
-	void InOrderTraverse(RB_Node<KEY, VALUE>* node);	//中序遍历
-	void clear(RB_Node<KEY, VALUE>* node);	//清除RB树
-	//成员变量
-	RB_Node<KEY, VALUE>* m_nullNode;
-	RB_Node<KEY, VALUE>* m_root;
-	RB_Node<KEY, VALUE>* m_DBNode;
-public:
-	RB_Tree();	//构造函数
-	bool Empty();	//是否为空树
-	RB_Node<KEY, VALUE>* find(KEY key);	//查找键key的值
-	bool Insert(KEY key, VALUE val);	//插入
-	void InsertFixUp(RB_Node<KEY, VALUE>* node);	//插入后修复
-	bool RotateLeft(RB_Node<KEY, VALUE>* node);		//左旋
-	bool RotateRight(RB_Node<KEY, VALUE>* node);	//右旋
-	bool Delete(KEY key);	//删除
-	void DoubleBlackFixUp(RB_Node<KEY, VALUE>* node);	//双黑修复
-	RB_Node<KEY, VALUE>* FindMin(RB_Node<KEY, VALUE>* node);
-	void InOrderTraverse()	//中序遍历外部接口
-	{
-		InOrderTraverse(m_root);
-	}
-	~RB_Tree()
-	{
-		clear(m_root);
-		delete m_nullNode;
-	}
-};
-
-template<class KEY, class VALUE>
-RB_Tree<KEY, VALUE>::RB_Tree()		//构造函数
-{
-	this->m_nullNode = new RB_Node<KEY, VALUE>();
-	this->m_root = m_nullNode;
-	this->m_nullNode->right = this->m_root;
-	this->m_nullNode->left = this->m_root;
-	this->m_nullNode->parent = this->m_root;
-	this->m_nullNode->RB_COLOR = BLACK;
-	this->m_DBNode = new RB_Node<KEY, VALUE>();
-	this->m_DBNode->RB_COLOR = BLACK;
-	this->m_DBNode->left = m_nullNode;
-	this->m_DBNode->right = m_nullNode;
-};
-
-template<class KEY, class VALUE>
-bool RB_Tree<KEY, VALUE>::Empty()
-{
-	if (this->m_root == this->m_nullNode)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	cout << endl;
 }
 
-template<class KEY, class VALUE>
-RB_Node<KEY, VALUE>* RB_Tree<KEY, VALUE>::find(KEY key)	//查找，此处可递归，参考上一篇二叉查找树
-{
-	RB_Node<KEY, VALUE>* index = m_root;
-	while (index != m_nullNode)
-	{
-		if (key<index->key)
-		{
-			index = index->left;
-		}
-		else if (key>index->key)
-		{
-			index = index->right;
-		}
-		else
-		{
-			break;
-		}
-	}
-	return index;
-}
 
-/*
-左旋，构造一个指针lower_right指向旋转点的右孩子。
-lower_right的父结点为旋转点的父结点,旋转点的右孩子为lower_right的左孩子（如果左孩子不为空，则还要设置左孩子的父亲为旋转点）。
-判断旋转点是否为根节点。是的话更改m_root的值，否则更改旋转点的父结点左孩子 or 右孩子的指向。
-更改旋转点父结点为lower_right，lower_right的左孩子为旋转点
-*/
-template<class KEY, class VALUE>
-bool RB_Tree<KEY, VALUE>::RotateLeft(RB_Node<KEY, VALUE>* node)
-{
-	if (node == m_nullNode || node->right == m_nullNode)
-	{
-		return false;	//不能旋转
-	}
-	RB_Node<KEY, VALUE>* lower_right = node->right;
-	lower_right->parent = node->parent;
-	node->right = lower_right->left;
-	if (lower_right->left != m_nullNode)
-	{
-		lower_right->left->parent = node;
-	}
-	if (node->parent == m_nullNode)
-	{
-		m_root = lower_right;
-		m_nullNode->right = m_root;
-		m_nullNode->left = m_root;
-	}
-	else
-	{
-		if (node == node->parent->left)
-		{
-			node->parent->left = lower_right;
-		}
-		else
-		{
-			node->parent->right = lower_right;
-		}
-	}
-	node->parent = lower_right;
-	lower_right->left = node;
-}
-template<class KEY, class VALUE>
-bool RB_Tree<KEY, VALUE>::RotateRight(RB_Node<KEY, VALUE>* node)	//右旋，原理同左旋,left和right交换就可以
-{
-	if (node == m_nullNode || node->left == m_nullNode)
-	{
-		return false;//can't rotate    
-	}
-	RB_Node<KEY, VALUE>* lower_left = node->left;
-	node->left = lower_left->right;
-	lower_left->parent = node->parent;
-	if (lower_left->right != m_nullNode)
-	{
-		lower_left->right->parent = node;
-	}
-	if (node->parent == m_nullNode) //node is root    
-	{
-		m_root = lower_left;
-		m_nullNode->left = m_root;
-		m_nullNode->right = m_root;
-		//m_nullNode->parent = m_root;    
-	}
-	else
-	{
-		if (node == node->parent->right)
-		{
-			node->parent->right = lower_left;
-		}
-		else
-		{
-			node->parent->left = lower_left;
-		}
-	}
-	node->parent = lower_left;
-	lower_left->right = node;
-}
-
-/*
-插入，while循环将insert_point指向要插入的点
-如果插入点已经存在，返回false，如果插入的是一颗空树，直接赋值给根节点。否则在插入点赋值
-*/
-template<class KEY, class VALUE>
-bool RB_Tree<KEY, VALUE>::Insert(KEY key, VALUE val)
-{
-	RB_Node<KEY, VALUE>* insert_point = m_nullNode;
-	RB_Node<KEY, VALUE>* index = m_root;
-	while (index != m_nullNode)
-	{
-		insert_point = index;
-		if (key<index->key)
-		{
-			index = index->left;
-		}
-		else if (key > index->key)
-		{
-			index = index->right;
-		}
-		else
-		{
-			return false;
-		}
-	}	//此时insert_point指向要插入的点
-	RB_Node<KEY, VALUE>* insert_node = new RB_Node<KEY, VALUE>();	//构造插入的结点
-	insert_node->key = key;
-	insert_node->val = val;
-	insert_node->RB_COLOR = RED;
-	insert_node->right = m_nullNode;
-	insert_node->left = m_nullNode;
-	if (insert_point == m_nullNode)		//如果是一颗空树
-	{
-		m_root = insert_node;
-		m_root->parent = m_nullNode;
-		m_nullNode->left = m_root;
-		m_nullNode->right = m_root;
-		m_nullNode->parent = m_root;
-	}
-	else
-	{
-		if (key < insert_point->key)
-		{
-			insert_point->left = insert_node;
-		}
-		else
-		{
-			insert_point->right = insert_node;
-		}
-		insert_node->parent = insert_point;
-	}
-	InsertFixUp(insert_node);	//调用InsertFixUp修复红黑树性质
-}
-
-/*
-A	父亲节点为红色时才修复
-插入修复：分为插入点的父结点是祖父结点的左孩子还是右孩子
-B	左孩子的话：
-C		创建一个uncle结点指向叔叔节点（父结点的兄弟）。
-D		1）如果叔叔结点为红色：父结点和叔叔结点变黑，祖父节点变红且作为当前结点
-E		2）叔叔节点为黑色：如果插入节点是父节点的右孩子：父结点作为当前节点然后左旋，转换为情况三继续处理
-F		3）叔叔节点为黑色：插入节点为左孩子：父结点变黑，祖父变红，祖父结点为支点右旋
-G	右孩子的话：
-*/
-template<class KEY, class VALUE>
-void RB_Tree<KEY, VALUE>::InsertFixUp(RB_Node<KEY, VALUE>* node)
-{
-	while (node->parent->RB_COLOR == RED)		//A
-	{
-		if (node->parent == node->parent->parent->left)	//B
-		{
-			RB_Node<KEY, VALUE>* uncle = node->parent->parent->right;	//C
-			if (uncle->RB_COLOR == RED)	//D
-			{
-				node->parent->RB_COLOR = BLACK;
-				uncle->RB_COLOR = BLACK;
-				node->parent->parent->RB_COLOR = RED;
-				node = node->parent->parent;
-			}
-			else if (uncle->RB_COLOR == BLACK)
-			{
-				if (node == node->parent->right)	//E
-				{
-					node = node->parent;
-					RotateLeft(node);
-				}
-				//F
-				node->parent->RB_COLOR = BLACK;
-				node->parent->parent->RB_COLOR = RED;
-				RotateRight(node->parent->parent);
-			}
-		}
-		else    //G
-		{
-			RB_Node<KEY, VALUE>* uncle = node->parent->parent->left;
-			if (uncle->RB_COLOR == RED)
-			{
-				node->parent->RB_COLOR = BLACK;
-				uncle->RB_COLOR = BLACK;
-				uncle->parent->RB_COLOR = RED;
-				node = node->parent->parent;
-			}
-			else if (uncle->RB_COLOR == BLACK)
-			{
-				if (node == node->parent->left)
-				{
-					node = node->parent;
-					RotateRight(node);
-				}
-
-				node->parent->RB_COLOR = BLACK;
-				node->parent->parent->RB_COLOR = RED;
-				RotateLeft(node->parent->parent);
-			}
-		}
-	}
-	m_root->RB_COLOR = BLACK;	//修复根节点颜色，防止被改为红色
-}
-
-/*
-删除一个结点：
-
-*/
-template<class KEY, class VALUE>
-bool RB_Tree<KEY, VALUE>::Delete(KEY key)
-{
-
-	RB_Node<KEY, VALUE>* delete_point = find(key);	//找到要删除的点
-	if (delete_point == m_nullNode)
-	{
-		return false;
-	}
-	if (delete_point->left != m_nullNode && delete_point->right != m_nullNode)	//有两个子结点
-	{
-		RB_Node<KEY, VALUE>* replace_node = FindMin(delete_point->right);
-		//删除点和替换点的值互换，结点颜色不换
-		KEY tmpkey = delete_point->key;
-		VALUE tmpval = delete_point->val;
-		delete_point->key = replace_node->key;
-		delete_point->val = replace_node->val;
-		replace_node->key = tmpkey;
-		replace_node->val = tmpval;
-		delete_point = replace_node;
-	}
-	RB_Node<KEY, VALUE>* delete_point_child;
-	if (delete_point->RB_COLOR == RED)	//若该节点为红色
-	{
-		if (delete_point == delete_point->parent->left)	//如果是左孩子
-		{
-			delete_point->parent->left = m_nullNode;
-		}
-		else   //如果是右孩子
-		{
-			delete_point->parent->right = m_nullNode;
-		}
-		delete delete_point;
-	}
-
-	else if (delete_point->right != m_nullNode)	//如果右结点不为空,此时要删除的结点肯定为黑色，且右结点肯定为红色
-	{
-		if (delete_point == delete_point->parent->left)	//要删除的点是左结点
-		{
-			delete_point->parent->left = delete_point->right;
-			delete_point->right->parent = delete_point->parent;
-		}
-		else
-		{
-			delete_point->parent->right = delete_point->right;
-			delete_point->right->parent = delete_point->parent;
-		}
-		delete_point->right->RB_COLOR = BLACK;	//右结点颜色改为黑色
-		delete delete_point;
-	}
-	else if (delete_point->left != m_nullNode)	//如果左结点不为空（未经过替换），与右节点不为空操作一样
-	{
-		if (delete_point == delete_point->parent->left)	//要删除的点是左结点
-		{
-			delete_point->parent->left = delete_point->left;
-			delete_point->left->parent = delete_point->parent;
-		}
-		else
-		{
-			delete_point->parent->right = delete_point->left;
-			delete_point->left->parent = delete_point->parent;
-		}
-		delete_point->left->RB_COLOR = BLACK;	//右结点颜色改为黑色
-		delete delete_point;
-	}
-	else    //无子节点的情况
-	{
-		//此时唯一剩下情况为，要删除结点为黑色且无子结点
-		if (delete_point->parent == m_nullNode)	//如果要删除的是根节点
-		{
-			m_root = m_nullNode;
-			m_nullNode->parent = m_root;
-			m_nullNode->left = m_root;
-			m_nullNode->left = m_root;
-			delete delete_point;
-		}
-		else
-		{
+//void test()   //查找
+//{
+//	set<int> s;
+//	s.insert(2);
+//	s.insert(3);
+//	s.insert(4);
+//	s.insert(5);
+//	s.insert(6);
+//	s.insert(7);
+//	s.insert(8);
+//	auto it = s.find(5);
+//	cout << (it == s.end()) << endl;
+//	it = s.find(10);
+//	cout << (it == s.end()) << endl;
+//
+//	cout << s.count(5) << endl;
+//	cout << s.count(10) << endl;
+//
+//	pair<set<int>::iterator, set<int>::iterator> p = s.equal_range(5);
+//	cout << *(p.first) << endl;
+//	cout << *(p.second) << endl;
+//
+//}
+//void test()   //插入元素
+//{
+//	
+//	set<int> s;
+//
+//	//插入元素：成功-->返回值：bool：true，iterator：插入新元素的位置
+//	pair < set<int>::iterator, bool > kvRet = s.insert(1);
+//	bool ret = kvRet.second;
+//	cout << ret << endl;
+//	set<int>::iterator it = kvRet.first;
+//	cout << *it << endl;
+//
+//
+//	//重复元素插入失败，返回0，但是查询依然可以查到 iterator已经存在的元素位置
+//	kvRet = s.insert(1);
+//	ret = kvRet.second;
+//	cout << ret << endl;
+//	it = kvRet.first;
+//	cout << *it << endl;
+//
+//	s.insert(2);
+//	s.insert(3);
+//	s.insert(4);
+//	s.insert(5);
+//	s.insert(6);
+//	s.insert(7);
+//	s.insert(8);
+//
+//	it = s.begin();
+//	//insert(iterator, value); iterator只是参考作用不一定会真的吧值放在那个位置
+//	it = s.insert(it, 12);
+//	cout << *it << endl;
+//	++it;
+//	//cout << *it << endl;
+//	//不会插入新的元素，所有元素已经存在
+//	s.insert(s.begin(), s.end());
+//	set<int> s2;
+//	//插入所有元素
+//	s2.insert(s.begin(), s.end());
+//}
 
 
-			RB_Node<KEY, VALUE>* tmp = delete_point->parent;
-			if (delete_point == delete_point->parent->left)	//如果要删除结点为左节点
-			{
 
-				delete delete_point;
-				tmp->left = m_DBNode;
-				m_DBNode->parent = tmp;
-				DoubleBlackFixUp(m_DBNode);
-				tmp->left = m_nullNode;
-			}
-			else	//如果要删除结点为右节点
-			{
-
-				delete delete_point;
-				tmp->right = m_DBNode;
-				m_DBNode->parent = tmp;
-				DoubleBlackFixUp(m_DBNode);
-				tmp->right = m_nullNode;
-			}
-		}
-	}
-}
-
-/*
-双黑修复
-*/
-template<class KEY, class VALUE>
-void RB_Tree<KEY, VALUE>::DoubleBlackFixUp(RB_Node<KEY, VALUE>* node)	//传过来的参数都是双黑结点
-{
-
-	if (node == node->parent->left)	//如果此结点是左结点
-	{
-
-		RB_Node<KEY, VALUE>* brother = node->parent->right;
-		//情况3
-		if (brother->RB_COLOR == RED)
-		{
-			node->parent->RB_COLOR = RED;
-			brother->RB_COLOR = BLACK;
-			RotateLeft(node->parent);
-			//之后转入情况1或2
-		}
-		//情况1
-		if (brother->RB_COLOR == BLACK && (brother->left->RB_COLOR == RED || brother->right->RB_COLOR == RED))
-		{
+//void test()  //删除
+//{
+//	set<int> s;
+//	pair < set<int>::iterator, bool > kvRet = s.insert(1);
+//	bool ret = kvRet.second;
+//	set<int>::iterator it = kvRet.first;
+//	s.insert(2);
+//	s.insert(3);
+//	s.insert(4);
+//	s.insert(5);
+//	s.insert(6);
+//	s.insert(7);
+//	s.insert(8);
+//	while (it != s.end())
+//	{
+//		cout << *it << endl;
+//		++it;
+//	}
+//	
+//	s.erase(3);
+//	printSet(s);
+//	s.erase(s.begin());
+//	printSet(s);
+//	s.erase(s.begin(), s.end());
+//	printSet(s);
+//
+//	printSet(s);
+//	s.clear();
+//	printSet(s);
+//}
 
 
-			if (brother->right->RB_COLOR == RED)	//A
-			{
-				brother->RB_COLOR = node->parent->RB_COLOR;
-				brother->right->RB_COLOR == BLACK;
-				node->parent->RB_COLOR = BLACK;
-				RotateLeft(node->parent);
-			}
-			else   //B
-			{
-				RotateRight(brother);
-				node->parent->right->RB_COLOR = node->parent->RB_COLOR;
-				node->parent->RB_COLOR = BLACK;
-				RotateLeft(node->parent);
-			}
-		}
-		//情况2
-		else if (brother->RB_COLOR == BLACK && (brother->left->RB_COLOR == BLACK && brother->right->RB_COLOR == BLACK))
-		{
-			while (node->parent != m_nullNode)	//当node不是根节点的时候
-			{
-				brother->RB_COLOR = RED;
-				if (node->parent->RB_COLOR == RED)	//父结点原来为红色
-				{
-					node->parent->RB_COLOR = BLACK;
-					break;
-				}
-				else  //父结点本来就是黑色
-				{
-					node = node->parent;
-				}
-			}
-		}
 
-	}
-	else    //如果此节点是右结点，把左结点情况 left和right调换就可以
-	{
-		RB_Node<KEY, VALUE>* brother = node->parent->left;
-		//情况3
-		if (brother->RB_COLOR == RED)
-		{
-			node->parent->RB_COLOR = RED;
-			brother->RB_COLOR = BLACK;
-			RotateRight(node->parent);
-			//之后转入情况1或2
-		}
-		//情况1
-		if (brother->RB_COLOR == BLACK && (brother->right->RB_COLOR == RED || brother->left->RB_COLOR == RED))
-		{
-			if (brother->left->RB_COLOR == RED)	//A,远侄子
-			{
-				brother->RB_COLOR = node->parent->RB_COLOR;
-				brother->left->RB_COLOR = BLACK;
-				node->parent->RB_COLOR = BLACK;
-				RotateRight(node->parent);
-			}
-			else   //B
-			{
-				RotateLeft(brother);
-				node->parent->left->RB_COLOR = node->parent->RB_COLOR;
-				node->parent->RB_COLOR = BLACK;
-				RotateRight(node->parent);
-			}
-		}
-		//情况2
-		else if (brother->RB_COLOR == BLACK && (brother->right->RB_COLOR == BLACK && brother->left->RB_COLOR == BLACK))
-		{
-			while (node->parent != m_nullNode)	//当node不是根节点的时候
-			{
-				brother->RB_COLOR = RED;
-				if (node->parent->RB_COLOR == RED)	//父结点原来为红色
-				{
-					node->parent->RB_COLOR = BLACK;
-					break;
-				}
-				else  //父结点本来就是黑色
-				{
-					node = node->parent;
-				}
-			}
-		}
-	}
-}
+//void test()   //遍历元素
+//{
+//	set<int> s;
+//	int arr[] = { 10, 25, 13, 4, 55, 6 };
+//	set<int> s2(arr, arr + sizeof(arr) / sizeof(arr[0]));
+//	set<int>copy(s2);
+//	//遍历有序
+//	set<int>::iterator sit = s2.begin();
+//	while (sit != s2.end())
+//	{
+//		cout << *sit << " ";
+//		//set不能修改   而且set的值不能重复，重复的话只会显示一个值
+//		//*sit = 10;
+//		++sit;
+//	}
+//	cout << endl;
+//
+//
+//	//遍历顺序是递减的
+//	set<int, greater<int>> s3(arr, arr + sizeof(arr) / sizeof(arr[0]),greater<int>());
+//	set<int, greater<int>>::iterator sit2 = s3.begin();
+//	while(sit2 != s3.end())
+//	{
+//		cout << *sit2 << " ";
+//		++sit2;
+//	}
+//	cout << endl;
+//
+//	//反向输出
+//	set<int>::reverse_iterator rit = s2.rbegin();
+//	while (rit != s2.rend())
+//	{
+//		cout << *rit << " ";
+//		++rit;
+//	}
+//	cout << endl;
+//}
 
-template<class KEY, class VALUE>
-RB_Node<KEY, VALUE>* RB_Tree<KEY, VALUE>::FindMin(RB_Node<KEY, VALUE>* node)
-{
-	if (node->left == m_nullNode)
-		return node;
-	return FindMin(node->left);
-}
 
-template<class KEY, class VALUE>	//中序遍历
-void RB_Tree<KEY, VALUE>::InOrderTraverse(RB_Node<KEY, VALUE>* node)
-{
-	if (node == m_nullNode)
-	{
-		return;
-	}
-	else
-	{
-		InOrderTraverse(node->left);
-		cout << node->key << endl;
-		InOrderTraverse(node->right);
-	}
-}
-
-template<class KEY, class VALUE>
-void RB_Tree<KEY, VALUE>::clear(RB_Node<KEY, VALUE>* node)
-{
-	if (node == m_nullNode)
-	{
-		return;
-	}
-	else
-	{
-		clear(node->left);
-		clear(node->right);
-		delete node;
-	}
-};
-
+//int main()
+//{
+//	test();
+//	system("pause");
+//	return 0;
+//} 
