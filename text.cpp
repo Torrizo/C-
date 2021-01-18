@@ -1,159 +1,140 @@
+ï»¿#include<stdio.h>
+#include<stdlib.h>
+#include<string>
 #include<iostream>
-#include<set>
-#include<functional>
 using namespace std;
-template <class T>
-void printSet(const set<T>& set)
-{
-	for (const auto& e : set)
-	{
-		cout << e << " ";
+
+int available[1][3] = { 3, 3, 2 };//ç³»ç»Ÿå¯ç”¨èµ„æºA,B,C
+int max[5][3] = { { 7, 5, 3 }, { 3, 2, 2 }, { 9, 0, 2 }, { 2, 2, 2 }, { 4, 3, 3 } };//äº”ä¸ªè¿›ç¨‹ä¸‰ä¸ªèµ„æº
+int allocation[5][3] = { { 0, 1, 0 }, { 2, 0, 0 }, { 3, 0, 2 }, { 2, 1, 1 }, { 0, 0, 2 } };//å·²åˆ†é…æ•°ç›®
+int need[5][3] = { { 7, 4, 3 }, { 1, 2, 2 }, { 6, 0, 0 }, { 0, 1, 1 }, { 4, 3, 1 } };//æ¯ä¸ªè¿›ç¨‹å°šéœ€çš„èµ„æº
+int request[1][3] = { 0, 0, 0 };//è¯·æ±‚
+int work[1][3] = { 3, 3, 2 };
+int pah[5] = { -1, -1, -1, -1, -1 };//å®‰å…¨åºåˆ—
+void Show(int pah[]) {
+	cout << "process****work*****Need*****Allocation***Work+Allocation Â " << endl;
+	//cout << "process Â  Â work Â  Â  Need Â  Â  Allocation Â  Work+Allocation Â " << endl;
+	for (int i = 0; i < 5; i++) {
+		int n = pah[i];
+		cout << " Â P" << n << " Â  Â  ";
+		for (int j = 0; j < 3; j++) {
+			cout << work[0][j] << " Â ";
+		}
+		cout << "|";
+		for (int j = 0; j < 3; j++) {
+			cout << need[n][j] << " Â ";
+		}
+		cout << "|";
+		for (int j = 0; j < 3; j++) {
+			cout << allocation[n][j] << " Â ";
+		}
+		cout << "|";
+		cout << endl;
 	}
-	cout << endl;
+}
+bool compareto(int req[], int arr[]) {
+	bool a = false;
+	int i = 0;
+	if (req[0] <= arr[0] && req[1] <= arr[1] && req[2] <= arr[2]) {
+		a = true;
+	}
+	return a;
+}//voidÂ 
+int security() {
+	bool a = true;
+	cout << "process****work**********Need*****Allocation***Work+Allocation Â " << endl;
+	//cout << "process Â  Â work Â  Â  Â  Â  Â Need Â  Â  Allocation Â  Work+Allocation Â " << endl;
+	int count = 0, count1 = 0, count2 = 0;
+	bool finish[5] = { false, false, false, false, false };
+	for (int i = 0; i < 3; i++) {
+		work[0][i] = available[0][i];
+	}//for
+	while (count<15) {
+		if (count >= 5) {
+			count1 = count % 5;
+		}
+		else {
+			count1 = count;
+		}
+		while (finish[count1] == false && compareto(need[count1], work[0])) {
+			cout << " Â P" << count1 << " Â  Â  ";
+			for (int j = 0; j < 3; j++) {
+				cout << work[0][j] << " Â  ";
+			}
+			for (int i = 0; i < 3; i++) {
+				work[0][i] += allocation[count1][i];
+				finish[count1] = true;
+				pah[count2] = count1;
+			}//for
+			//Â Â  Â int n = pah[i];
+			cout << "|";
+			for (int j = 0; j < 3; j++) {
+				cout << need[count1][j] << " Â  ";
+			}
+			cout << "|";
+			for (int j = 0; j < 3; j++) {
+				cout << allocation[count1][j] << " Â  ";
+			}
+			cout << "|";
+			for (int j = 0; j < 3; j++) {
+				cout << work[0][j] << " Â  ";
+			}
+			cout << endl;
+			count2++;
+		}//while2
+		count++;
+	}//while1
+	for (int i = 0; i < 5; i++) {
+		if (pah[i] <0) {
+			a = false;
+		}
+	}//for
+	return count2;
+}
+void Request() {
+	int n;
+	cin >> n;
+	while (n != -1) {
+		for (int i = 0; i < 3; i++) {
+			cin >> request[0][i];
+		}
+		if (compareto(request[0], need[n])) {
+			if (compareto(request[0], available[0])) {
+				for (int i = 0; i < 3; i++) {
+					available[0][i] -= request[0][i];
+					allocation[n][i] += request[0][i];
+					need[n][i] -= request[0][i];//èµ„æºåˆ†é…
+
+				}//for
+				int b = security();
+				if (b < 4) {
+					for (int i = 0; i < 3; i++) {
+						available[0][i] += request[0][i];
+						allocation[n][i] -= request[0][i];
+						need[n][i] += request[0][i];//æ’¤é”€æ“ä½œ
+
+					}//for
+					cout << "false";
+				}
+				else if (b == 4) {
+					Show(pah);
+				}
+			}//if2
+			else if (!compareto(request[0], available[0])) {
+				cout << "please wait";
+			}
+		}//if1
+		else if (!compareto(request[0], need[n])) {
+			cout << "value error";
+		}
+		cin >> n;
+	}
+}//voidÂ 
+
+int main() {
+	if (security()) {};
+	Request();
+	system("pause");
+	//return 0;
 }
 
-
-//void test()   //²éÕÒ
-//{
-//	set<int> s;
-//	s.insert(2);
-//	s.insert(3);
-//	s.insert(4);
-//	s.insert(5);
-//	s.insert(6);
-//	s.insert(7);
-//	s.insert(8);
-//	auto it = s.find(5);
-//	cout << (it == s.end()) << endl;
-//	it = s.find(10);
-//	cout << (it == s.end()) << endl;
-//
-//	cout << s.count(5) << endl;
-//	cout << s.count(10) << endl;
-//
-//	pair<set<int>::iterator, set<int>::iterator> p = s.equal_range(5);
-//	cout << *(p.first) << endl;
-//	cout << *(p.second) << endl;
-//
-//}
-//void test()   //²åÈëÔªËØ
-//{
-//	
-//	set<int> s;
-//
-//	//²åÈëÔªËØ£º³É¹¦-->·µ»ØÖµ£ºbool£ºtrue£¬iterator£º²åÈëĞÂÔªËØµÄÎ»ÖÃ
-//	pair < set<int>::iterator, bool > kvRet = s.insert(1);
-//	bool ret = kvRet.second;
-//	cout << ret << endl;
-//	set<int>::iterator it = kvRet.first;
-//	cout << *it << endl;
-//
-//
-//	//ÖØ¸´ÔªËØ²åÈëÊ§°Ü£¬·µ»Ø0£¬µ«ÊÇ²éÑ¯ÒÀÈ»¿ÉÒÔ²éµ½ iteratorÒÑ¾­´æÔÚµÄÔªËØÎ»ÖÃ
-//	kvRet = s.insert(1);
-//	ret = kvRet.second;
-//	cout << ret << endl;
-//	it = kvRet.first;
-//	cout << *it << endl;
-//
-//	s.insert(2);
-//	s.insert(3);
-//	s.insert(4);
-//	s.insert(5);
-//	s.insert(6);
-//	s.insert(7);
-//	s.insert(8);
-//
-//	it = s.begin();
-//	//insert(iterator, value); iteratorÖ»ÊÇ²Î¿¼×÷ÓÃ²»Ò»¶¨»áÕæµÄ°ÉÖµ·ÅÔÚÄÇ¸öÎ»ÖÃ
-//	it = s.insert(it, 12);
-//	cout << *it << endl;
-//	++it;
-//	//cout << *it << endl;
-//	//²»»á²åÈëĞÂµÄÔªËØ£¬ËùÓĞÔªËØÒÑ¾­´æÔÚ
-//	s.insert(s.begin(), s.end());
-//	set<int> s2;
-//	//²åÈëËùÓĞÔªËØ
-//	s2.insert(s.begin(), s.end());
-//}
-
-
-
-//void test()  //É¾³ı
-//{
-//	set<int> s;
-//	pair < set<int>::iterator, bool > kvRet = s.insert(1);
-//	bool ret = kvRet.second;
-//	set<int>::iterator it = kvRet.first;
-//	s.insert(2);
-//	s.insert(3);
-//	s.insert(4);
-//	s.insert(5);
-//	s.insert(6);
-//	s.insert(7);
-//	s.insert(8);
-//	while (it != s.end())
-//	{
-//		cout << *it << endl;
-//		++it;
-//	}
-//	
-//	s.erase(3);
-//	printSet(s);
-//	s.erase(s.begin());
-//	printSet(s);
-//	s.erase(s.begin(), s.end());
-//	printSet(s);
-//
-//	printSet(s);
-//	s.clear();
-//	printSet(s);
-//}
-
-
-
-//void test()   //±éÀúÔªËØ
-//{
-//	set<int> s;
-//	int arr[] = { 10, 25, 13, 4, 55, 6 };
-//	set<int> s2(arr, arr + sizeof(arr) / sizeof(arr[0]));
-//	set<int>copy(s2);
-//	//±éÀúÓĞĞò
-//	set<int>::iterator sit = s2.begin();
-//	while (sit != s2.end())
-//	{
-//		cout << *sit << " ";
-//		//set²»ÄÜĞŞ¸Ä   ¶øÇÒsetµÄÖµ²»ÄÜÖØ¸´£¬ÖØ¸´µÄ»°Ö»»áÏÔÊ¾Ò»¸öÖµ
-//		//*sit = 10;
-//		++sit;
-//	}
-//	cout << endl;
-//
-//
-//	//±éÀúË³ĞòÊÇµİ¼õµÄ
-//	set<int, greater<int>> s3(arr, arr + sizeof(arr) / sizeof(arr[0]),greater<int>());
-//	set<int, greater<int>>::iterator sit2 = s3.begin();
-//	while(sit2 != s3.end())
-//	{
-//		cout << *sit2 << " ";
-//		++sit2;
-//	}
-//	cout << endl;
-//
-//	//·´ÏòÊä³ö
-//	set<int>::reverse_iterator rit = s2.rbegin();
-//	while (rit != s2.rend())
-//	{
-//		cout << *rit << " ";
-//		++rit;
-//	}
-//	cout << endl;
-//}
-
-
-//int main()
-//{
-//	test();
-//	system("pause");
-//	return 0;
-//} 
