@@ -1,5 +1,5 @@
 #include<iostream>
-#include<>
+#include<utility>
 #include<iostream>
 using namespace std;
 enum COLOR  //枚举类型
@@ -35,6 +35,7 @@ class BRTree
 {
 public:
 	typedef RBNode<K, V> Node;
+	//typedef _RBTreeIterator<K, V> iterator;
 
 
 	RBTree() //构造函数
@@ -114,13 +115,74 @@ public:
 					//uncle不存在，或者uncle存在为黑色
 					//1.旋转
 					RotateR(grandfather);
-
+					//判断是否为双旋
+					if (cur == parent->_right)
+					{
+						RotateL(parent);
+						swap(cur, parent);
+						//退化到单旋
+					}
+					//cur,parent都在左边右单选
+					RotateL(grandfather);
 					//2.修改颜色
+
 					parent->_color = BLACK;
 					grandfather->_color = RED;
 
 					//结束
 					break;
+				}
+			}
+			else
+			{
+				Node* uncle = grandfather->_left;
+				//uncle存在且为红
+				if (uncle && uncle->_color == RED)
+				{
+					//修改parent，uncle颜色
+					parent->_color = uncle->_color = BLACK;
+					//修改grandfather
+					grandfather->_color = RED;
+					//继续更新
+					cur = grandfather;
+				}
+
+				//uncle不存在 或者 存在且为黑
+				else
+				{
+					if (cur == parent->_left)
+					{
+						RotateR(parent);
+						swap(cur, parent);
+					}
+					RotateL(grandfather);
+					parent->_color = BLACK;
+					grandfather->_color = RED;
+					break;
+				}
+				else
+				{
+					Node* uncle = grandfather->_left;
+
+					//uncle
+					if (uncle && uncle->_color == RED)
+					{
+						parent->_color = uncle->_color = BLACK;
+						grandfather->_color = RED;
+						cur = grandfather;
+					}
+					else
+					{
+						if (cur == parent->_left)
+						{
+							RotateR(parent);
+							swap(cur, parent);
+						}
+						RotateL(grandfather);
+						parent->_color = BLACK;
+						grandfather->_color = RED;
+						break;
+					}
 				}
 			}
 		}
@@ -185,6 +247,83 @@ public:
 		}
 		parent->_parent = subR;
 	}
+	Node* leftMost()
+	{
+		Node* cur = _header->_parent;
+		while (cur && cur->_left)
+			cur = cur->_left;
+		return cur;
+	}
+	Node* rightMost()
+	{
+		Node* cur = _header->_parent;
+		while (cur && cur->_right)
+			cur = cur->_right;
+		return cur;
+	}
+	void inorder(Node* root)
+	{
+		if (root)
+		{
+			_inorder(root->_left);
+			cout << root->_kv.first << " ";
+			_inorder(root->_right);
+		}
+	}
+	void inorder()
+	{
+		_inorder(_header->_parent);
+		cout << endl;
+	}
+
+	//红黑树
+	//1.红色不能连续
+	//2.
+
+	bool isRBtree()
+	{
+		Node* root = _header->_parent;
+		if (root == nullptr)
+			return true
+			//根是黑色
+		if (root->_color == RED)
+		{
+			cout << "跟不是黑色" << endl;
+			return false;
+		}
+		Node* cur = root;
+		int blackCount = 0;
+		while (cur)
+		{
+			if (cur->_color == BLACK)
+				++blackCount;
+			cur = cur->_left;
+		}
+		int k = 0;
+		return _isRBtree(root, int k, int blackCount);
+	}
+
+	bool _isRBtree(Node* root, int k, int balckCount)
+	{
+		//每条路径黑色节点树是否相同
+		if (root == nullptr)
+		{
+			if (k == blackCount)
+				return true;
+			cout << "黑色个数不同" << endl;
+			return false;
+		}
+		//查看当前节点是否为黑色
+		if (root->_color == BLACK)
+			++k;
+		//红色是否连续
+		if (root->_parent && root->_color == RED && root->_parent->_color == RED)
+		{
+			cout << "红色连续" << endl;
+			return false;
+		}
+		return  _isRBtree(root->_left, k, blackCount) && _isRBtree(root->_right, k, blackCount);
+	}
 
 private:
 	//定义一个头结点
@@ -192,21 +331,77 @@ private:
 
 };
 
+//红黑树迭代器：非原生指针，封装节点
+template<class K,class V>
+struct _RBTreeIterator
+{
+	typedef RBNode<K, V> Node;
+	typedef _RBNode<k, v> Self;
+
+	//封装
+	Node* _node;
+	_RBTreeIterator(Node* node)
+		:_node(node)
+	{ }
+	pair<K, V>& operator*()
+	{
+		//获取节点中的数据
+		return _node->_kv;
+	}
+	pair<K, V>& operator->()
+	{
+		//获取节点中数据的指针
+		return &_node->_kv;
+	}
+	bool operator !=(const Self& it)
+	{
+		return _node != it._node;
+	}
+	Self& operator++()
+	{
+		//判断是否有右子树
+		if (node->_right)
+		{
+			//下一个要访问的节点：右子树的最左节点
+			_node = _node->right;
+			while (_node->_left)
+				_node = _node->_left;
+		}
+		else
+		{
+			//右子树不存在
+			//下一个访问节点：父节点-->次父节点的孩子节点不是它的右节点
+			Node* parent = _node->_parent;
+			while (_node == parent->_right)
+			{
+				_node = parent;
+				parent = parent->_parent;
+			}
+
+			_node = parent;
+		}
+		return *this;
+	}
+	Self& operator--()
+	{
+		return *this;
+	}
+};
 
 
 
 void test()
 {
-	BRTree<int, string> rbtree;
-	BRTree<string, int> rbtree2;
-	rbtree.insert(make_pair(1, "one"));
-	rbtree.insert(make_pair(10, "ten"));
-	rbtree.insert(make_pair(0, "zero"));
-	rbtree.insert(make_pair(5, "five"));
+	BRTree<int, string> brtree;
+	BRTree<string, int> brtree2;
+	brtree.insert(make_pair(1, "one"));
+	brtree.insert(make_pair(10, "ten"));
+	brtree.insert(make_pair(0, "zero"));
+	brtree.insert(make_pair(5, "five"));
 
-	rbtree2.insert(make_pair("one"), 1);
-	rbtree2.insert(make_pair("twe"), 2);
-	rbtree2.insert(make_pair("three"), 1);
+	brtree2.insert(make_pair("one"), 1);
+	brtree2.insert(make_pair("twe"), 2);
+	brtree2.insert(make_pair("three"), 1);
 
 }
 
