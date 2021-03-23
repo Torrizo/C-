@@ -1,107 +1,69 @@
-//#include<iostream>
-//#include<vector>
-//#include<stack>
-//using namespace std;
-////struct TreeNode
-////{
-////	int val;
-////	TreeNode *left;
-////	TreeNode *right;
-////	TreeNode(int x) :val(x), left(nullptr), right(nullptr){}
-////	TreeNode(int x,TreeNode *left,TreeNode *right) : val(x), left(nullptr), right(nullptr){}
-////};
-////前序遍历
-//class  Solution
+#include<iostream>
+#include<vector>
+#include<list>
+using namespace std;
+int test(int num1, int num2, int num3, int num4)
+{
+	int a, b, c;
+	a = (num1 + num3) / 2;
+	b = (num2 + num4) / 2;
+	c = (num4 - num2) / 2;
+	if ((a - ((num1 + num3) / 2)) != 0)
+	{
+		cout << "No" << endl;
+	}
+	else if ((b - ((num2 + num4) / 2)) != 0)
+	{
+		cout << "No" << endl;
+	}
+	else if ((c - ((num4 - num2) / 2)) != 0)
+	{
+		cout << "No" << endl;
+	}
+	else
+	{
+		cout << "" << a;
+		cout << "" << b;
+		cout << "" << c;
+	}
+	
+	return 0;
+}
+
+//
+//int main()
 //{
-//public:
-//	vector<int>preorderTraversal(TreeNode* root){
-//		stack<TreeNode*> st; 
-//		TreeNode* cur = root;
-//		vector<int> vec; 
-//		while (cur || st.empty())
-//		{
-//			//首先访问最左路径节点
-//			while (cur)
-//			{
-//				//访问根
-//				vec.push_back(cur->val);
-//				st.push(cur);
-//				cur = cur->left;
-//			}
-//			cur = st.top();
-//			st.pop();
-//			//访问右子树
-//			cur = cur->right;
-//		}
-//		return vec;
-//	}
-//};
-////中序遍历
-//class  Solution
-//{
-//public:
-//	vector<int>preorderTraversal(TreeNode* root){
-//		stack<TreeNode*> st;
-//		TreeNode* cur = root;
-//		vector<int> vec;
-//		while (cur || st.empty())
-//		{
-//			//首先访问最左路径节点
-//			while (cur)
-//			{
-//				//左子树
-//				st.push(cur);
-//				cur = cur->left;
-//			}
-//			//节点
-//			TreeNode * top = st.top();
-//			st.pop();
-//			vec.push_back(top->val);
-//			//访问右子树
-//			cur = cur->right;
-//		}
-//		return vec;
-//	}
-//}; 
-//struct TreeNode
-//{
-//	int val;
-//	TreeNode *left;
-//	TreeNode *right;
-//	TreeNode() :val(0), left(nullptr), right(nullptr){}
-//	TreeNode(int x) : val(x), left(nullptr), right(nullptr){}
-// 	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right){}
-//};
-//class Soluion
-//{
-//public:
-//	vector<int> postorderTraversal(TreeNode* root){
-//		stack<TreeNode*> st;
-//		vector<int> vec;
-//		TreeNode* cur = root;
-//		while (cur || !st.empty())
-//		{
-//			while (cur)
-//			{
-//				st.push(cur);
-//				cur = cur->left;
-//			}
-//			TreeNode top = st.top();
-//			if (top->right == nullptr ||  top->right == prev)
-//			{
-//				vec.push_back(top->val);
-//				st.pop();
-//				prev = top;
-//			}
-//			else
-//			{
-//				//如果右子树没有访问，首先访问右子树
-//				cur = top->right;
-//			}
-//		}
-//	}
-//};
-//int mian()
-//{
+//	int num1, num2, num3, num4;
+//	cin >> num1;
+//	cin >> num2;
+//	cin >> num3;
+//	cin >> num4;
+//	test(num1,num2,num3,num4);
+//	system("pause");
 //	return 0;
 //}
+
+int main()
+{
+	string s = "", table = "0123456789ABCDEF";
+	int M = 0, N = 0;
+	cin >> M >> N;
+
+	if (M == 0)
+	{
+		s = "0";
+	}
+
+	while (M)
+	{
+		if (M < 0)
+		{
+			M = -M;
+			cout << "-";
+		}
+		s = table[M % N] + s;
+		M /= N;
+	}
+	cout << s << endl;
+	return 0;
+}
