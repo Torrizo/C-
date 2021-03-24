@@ -1,69 +1,86 @@
 #include<iostream>
-#include<vector>
 #include<list>
+#include<vector>
+#include<algorithm>
 using namespace std;
-int test(int num1, int num2, int num3, int num4)
+void add()
 {
-	int a, b, c;
-	a = (num1 + num3) / 2;
-	b = (num2 + num4) / 2;
-	c = (num4 - num2) / 2;
-	if ((a - ((num1 + num3) / 2)) != 0)
+	int v,f,g,h,l;
+	int n = 0;
+	cin >> n;
+	vector<int> a;
+	list<int> num;
+	for (int i = 0; i < n; i++)
 	{
-		cout << "No" << endl;
+		int s = 0;
+		cin >> s;
+		num.push_back(s);
 	}
-	else if ((b - ((num2 + num4) / 2)) != 0)
+	for (int i = 0; i < n - 1; i++)
 	{
-		cout << "No" << endl;
+		char s;
+		cin >> s;
+		a.push_back(s);
 	}
-	else if ((c - ((num4 - num2) / 2)) != 0)
+	sort(num.begin(), num.end());
+	for (int i = 0; i < n - 1; i++)
 	{
-		cout << "No" << endl;
+		int j = 0;
+		if (a.at(i) == '*')
+		{
+			//v = num.at[j] * num.at[j + 1];
+			f = num.front;
+			num.pop_front;
+			f = f*num.front;
+			num.pop_front;
+		}
 	}
-	else
+	for (int i = 0; i < n - 1; i++)
 	{
-		cout << "" << a;
-		cout << "" << b;
-		cout << "" << c;
+		int f = 0;
+		int j = 0;
+		if (a.at(i) == '+')
+		{
+			//v = num.at[j] * num.at[j + 1];
+			g = num.front;
+			num.pop_front;
+			g = g+num.front;
+			num.pop_front;
+		}
 	}
+	for (int i = 0; i < n - 1; i++)
+	{
+		int j = 0;
+		if (a.at(i) == '-')
+		{
+			//v = num.at[j] * num.at[j + 1];
+			h = num.front;
+			num.pop_front;
+			h= h - num.front;
+			num.pop_front;
+		}
+	}
+	for (int i = 0; i < n - 1; i++)
+	{
+		int j = 0;
+		if (a.at(i) == '%')
+		{
+			//v = num.at[j] * num.at[j + 1];
+			l = num.front;
+			num.pop_front;
+			l = l % num.front;
+			num.pop_front;
+		}
+	}
+	v = l + g + h + f;
+	cout << v << endl;
 	
-	return 0;
 }
 
-//
-//int main()
-//{
-//	int num1, num2, num3, num4;
-//	cin >> num1;
-//	cin >> num2;
-//	cin >> num3;
-//	cin >> num4;
-//	test(num1,num2,num3,num4);
-//	system("pause");
-//	return 0;
-//}
+
 
 int main()
 {
-	string s = "", table = "0123456789ABCDEF";
-	int M = 0, N = 0;
-	cin >> M >> N;
-
-	if (M == 0)
-	{
-		s = "0";
-	}
-
-	while (M)
-	{
-		if (M < 0)
-		{
-			M = -M;
-			cout << "-";
-		}
-		s = table[M % N] + s;
-		M /= N;
-	}
-	cout << s << endl;
+	system("pause");
 	return 0;
 }
