@@ -1,86 +1,47 @@
-#include<iostream>
-#include<list>
-#include<vector>
-#include<algorithm>
-using namespace std;
-void add()
-{
-	int v,f,g,h,l;
-	int n = 0;
-	cin >> n;
-	vector<int> a;
-	list<int> num;
-	for (int i = 0; i < n; i++)
-	{
-		int s = 0;
-		cin >> s;
-		num.push_back(s);
-	}
-	for (int i = 0; i < n - 1; i++)
-	{
-		char s;
-		cin >> s;
-		a.push_back(s);
-	}
-	sort(num.begin(), num.end());
-	for (int i = 0; i < n - 1; i++)
-	{
-		int j = 0;
-		if (a.at(i) == '*')
-		{
-			//v = num.at[j] * num.at[j + 1];
-			f = num.front;
-			num.pop_front;
-			f = f*num.front;
-			num.pop_front;
-		}
-	}
-	for (int i = 0; i < n - 1; i++)
-	{
-		int f = 0;
-		int j = 0;
-		if (a.at(i) == '+')
-		{
-			//v = num.at[j] * num.at[j + 1];
-			g = num.front;
-			num.pop_front;
-			g = g+num.front;
-			num.pop_front;
-		}
-	}
-	for (int i = 0; i < n - 1; i++)
-	{
-		int j = 0;
-		if (a.at(i) == '-')
-		{
-			//v = num.at[j] * num.at[j + 1];
-			h = num.front;
-			num.pop_front;
-			h= h - num.front;
-			num.pop_front;
-		}
-	}
-	for (int i = 0; i < n - 1; i++)
-	{
-		int j = 0;
-		if (a.at(i) == '%')
-		{
-			//v = num.at[j] * num.at[j + 1];
-			l = num.front;
-			num.pop_front;
-			l = l % num.front;
-			num.pop_front;
-		}
-	}
-	v = l + g + h + f;
-	cout << v << endl;
-	
-}
-
-
-
-int main()
-{
-	system("pause");
-	return 0;
-}
+////#include<bit/stdc++.h>
+//#include<iostream>
+//#include<unordered_map>
+//#include<vector>
+//
+//using namespace std;
+//int main()
+//{
+//	int n ,m;
+//	cin >> n >> m;
+//	vector<pair<int, int>> v;
+//	for (int i = 1; i <= n; i++)
+//	{
+//		int num;
+//		cin >> num;
+//		v.push_back(make_pair(num, i));
+//	}
+//	unordered_map<int, pair<int, int>> mp;
+//	for (auto item : v)
+//	{
+//		if (mp.find(item.first) == mp.end())
+//		{
+//			mp[item.first] = make_pair(item.second, item.second);
+//		}
+//		else
+//		{
+//			if (mp[item.first].first > item.second)
+//			{
+//				mp[item.first].first = item.second;
+//			}
+//			else if (mp[item.first].second<item.second)
+//			{
+//				mp[item.first].second = item.second;
+//			}
+//		}
+//	}
+//	for (int i = 0; i < m; i++)
+//	{
+//		int x;
+//		cin >> x;
+//		if (mp.find(x) != mp.end())
+//		{
+//			cout << mp[x].first << " " << mp[x].second << endl;
+//		}
+//	}
+//	return 0;
+//}
