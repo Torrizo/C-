@@ -1,174 +1,59 @@
-#include<vector>
-#include<list>
-#include<iostream>
-#include<algorithm>
-////using namespace std;
-//////int XOR(const vector<int>& v, int i, int j)
-//////{
-//////	int res = v[i];
-//////	for (int k = i + 1; k <= j; k++)
-//////	{
-//////		res ^= v[k];
-//////	}
-//////	return res;
-//////}
-//////int main()
-//////{
-//////	int n, k;
-//////	cin >> n >> k;
-//////	vector<int> v;
-//////	for (int i = 0; i < n; i++)
-//////	{
-//////		int num;
-//////		cin >> num;
-//////		v.push_back(num);
-//////	}
-//////	int res INT_MIN;
-//////	for (int i = 0; i < n; i++)
-//////	{
-//////		for (int j = i; j < n&&j < i + k; j++)
-//////		{
-//////			res = max(res, XOR(v, i, j));
-//////		}
-//////	}
-//////	cout << res << endl;
-//////	system("pause");
-//////	return 0;
-//////}
-////int fun()
-////{
-////	unsigned int n, k;
-////	cin >> n >> k;
-////	vector<int> v;
-////	for (int i = 0; i < n; i++)
-////	{
-////		int num;
-////		cin >> num;
-////		v.push_back(num);
-////	}
-////	int count = 0;
-////	int res = 0;
-////	sort(v.begin(), v.end());
-////	int i = v.size() - 1;
-////	for (; i >= 0; i--)
-////	{
-////		if (v[i] > 0)
-////		{
-////			res += v[i];
-////			count++;
-////		}
-////		else
-////		{
-////			while (i >= 3)
-////			{
-////				if (v[i] + v[i - 1] + v[i - 2] >=k)
-////				{
-////					count += 3;
-////					res += v[i] + v[i - 1] + v[i - 2];
-////					i -= 3;
-////				}
-////				else
-////				{
-////					break;
-////				}
-////			}
-////			break;
-////		}
-////	}
-////	res += count / 3 * k;
-////	cout << res << endl;
-////	return 0;
-////	
-////
-////	
-////	
-////}
-////
-////
-////int main()
-////{
-////	fun();
-////	system("pause");
-////	return 0;
-////}
-//
-//#include<vector>
-//#include<iostream>
-//#include<algorithm>
-//
-//using namespace std;
-//bool myfunction(int i, int j)
-//{
-//	return (i > j);
-//}
-//void fun()
-//{
-//	int n, k;
-//	cin >> n >> k;
-//	vector<int> vct;
-//	int sum = 0;
-//	int count = 0;
-//	for (int i = 0; i < n; ++i)
-//	{
-//		int tmp;
-//		cin >> tmp;
-//		if (tmp > 0)
-//		{
-//			sum += tmp;
-//			if (count % 3 == 0)
-//			{
-//				sum += k;
-//			}
-//			else
-//			{
-//				vct.push_back(tmp);
-//			}
-//		}
-//		sort(vct.begin(), vct.end(),myfunction);
-//		int s = 0;
-//		for (auto& v : vct)
-//		{
-//			count++;
-//			s += v;
-//			if (count % 3 == 0)
-//			{
-//				s += k;
-//				if (s > 0)
-//				{
-//					sum += s;
-//					s = 0;
-//				}
-//				else
-//				{
-//					break;
-//				}
-//			}
-//		}
-//	}
-//	cout << sum << endl;
-//}
-//int main()
-//{
-//	fun();
-//	system("pause");
-//	return 0;
-//}
-#include<iostream>
-
-class B
-{
-public:
-	int func()
-	{
-		cout << " " << endl;
+/*
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+	string input;
+	cin >> input;
+	if (input.size() == 5) {
+		cout << "horse" << endl;
 	}
-};
-
-class A : public B
-{
-public:
-	virtual void fun()
-	{
-		cout << " " << endl;
+	else {
+		int p = 0;
+		int c = 0;
+		string cat = "cat";
+		string pig = "pig";
+		for (int i = 0; i < input.size(); i++) {
+			p += abs(input[i] - pig[i]);
+			c += abs(input[i] - cat[i]);
+		}
+		if (p < c) {
+			cout << "pig" << endl;
+		}
+		else {
+			cout << "cat" << endl;
+		}
 	}
-};
+}
+
+*/
+
+#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+	int n, m;
+	cin >> n >> m;
+	vector<int> input(m, 0);
+	for (int i = 0; i < m; i++) {
+		cin >> input[i];
+	}
+	//表示电灯状态
+	vector<int> state(n, 1);
+	//状态改变的时间
+	vector<int> changeTime(n, -1);
+	for (int i = 0; i < m; i++) {
+		for (int j = input[i] - 1; j < n; j++) {
+			if (state[j] == 1) {
+				state[j] = 0;
+				if (changeTime[j] == -1) {
+					changeTime[j] = i+1;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < changeTime.size(); i++) {
+		cout << changeTime[i] << " ";
+	}
+	cout << endl;
+}
