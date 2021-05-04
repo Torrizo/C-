@@ -1,82 +1,31 @@
 #include<iostream>
 #include<vector>
 using namespace std;
-//int j = 0;
-//int fun(int x ,vector<int>&v)
-//{
-//	int max = v[0];
-//	int min = v[0];
-//	int m = 0;
-//	int n = 0;
-//	for (int i = 0; i < x; i++)
-//	{
-//		if (v[i]>max)
-//		{
-//			max = v[i];
-//			n=i;
-//		}
-//	}
-//	for (int i = 0; i < x; i++)
-//	{
-//		if (v[i]<min)
-//		{
-//			min = v[i];
-//			m=i;
-//		}
-//	}
-//	//cout << max << endl;
-//	if ((max + min) % 2 == 0)
-//	{
-//		v[m] = (max + min) / 2;
-//		v[n] = (max + min) / 2;
-//	}
-//	else
-//	{
-//		v[m] = (max + min) / 2;
-//		v[n] = (max + min) / 2 + 1;
-//	}
-//	for (int i = 0; i < x-1; i++)
-//	{
-//		if (v[i] == v[i + 1])
-//		{
-//			return fun(x,v);
-//			j++;
-//			break;
-//		}
-//		else
-//		{
-//			cout << j << endl;
-//		}
-//	}
-//}
-//
-//int main()
-//{
-//	int x;
-//	cin >> x;
-//	vector<int>v;
-//	for (int i = 0; i < x; i++)
-//	{
-//		int u;
-//		cin >> u;
-//		v.push_back(u);
-//	}
-//	fun(x,v);
-//	system("pause");
-//	return 0;
-//}
-
-class A{
-public:
-	virtual void fun_1(){}
-	virtual void fun_2(){}
-
-};
-class B :public A{
-
-};
+int test(int v, int* a,int n)
+{
+	if (v > a[n - 1])
+	{
+		return n + 1;
+	}
+	int left = 0;
+	int right = n - 1;
+	int mid = (left + right) / 2;
+	while (left < right)
+	{
+		if (a[mid] >= v)
+		{
+			right = mid;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+		mid = left + (right - left) / 2;
+	}
+	return mid + 1;
+}
 int main()
 {
-	cout << sizeof(A) << endl;
+	vector<int> v;
 	return 0;
 }
