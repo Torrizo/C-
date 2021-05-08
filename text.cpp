@@ -1,29 +1,17 @@
 #include<iostream>
+#include<string>
 using namespace std;
+	
+	
 
-//定义二叉树结点
-struct BiTreeNode
+int main()
 {
-	int data;
-	BiTreeNode* left;
-	BiTreeNode* right;
-};
-void preOrder(BiTreeNode *root){
-	cout << root->data;
-	preOrder(root->left);
-	preOrder(root->right);
-}
-
-//中序
-void inOrder(BiTreeNode *root){
-	preOrder(root->left);
-	cout << root->data;
-	preOrder(root->right);
-}
-
-//后序
-void postOrder(BiTreeNode *root){
-	preOrder(root->left);
-	preOrder(root->right);
-	cout << root->data;
+	string str1 = "hello";
+	string str2;
+	cin >> str1;
+	cin >> str2;
+	char *pos = const_cast<char*>(str1.c_str());
+	
+	
+	return 0;
 }
