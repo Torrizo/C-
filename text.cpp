@@ -1,17 +1,15 @@
 #include<iostream>
-#include<string>
+#define TEST1(X,Y) X+Y
+#define TEST2(X) #X
+#define TEST3(X,Y) X##Y
+#define TEST4(X,Y) (X+Y)
 using namespace std;
-	
-	
 
 int main()
 {
-	string str1 = "hello";
-	string str2;
-	cin >> str1;
-	cin >> str2;
-	char *pos = const_cast<char*>(str1.c_str());
-	
-	
+	string s = "XXX";
+	int i = 1 - TEST4(1, 2)*TEST1(5, 6) * 2;
+	cout << i << endl;
+	system("pause");
 	return 0;
 }
