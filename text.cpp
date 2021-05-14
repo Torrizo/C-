@@ -1,15 +1,31 @@
 #include<iostream>
-#define TEST1(X,Y) X+Y
-#define TEST2(X) #X
-#define TEST3(X,Y) X##Y
-#define TEST4(X,Y) (X+Y)
+#include<vector>
 using namespace std;
-
+int test(int v, int* a,int n)
+{
+	if (v > a[n - 1])
+	{
+		return n + 1;
+	}
+	int left = 0;
+	int right = n - 1;
+	int mid = (left + right) / 2;
+	while (left < right)
+	{
+		if (a[mid] >= v)
+		{
+			right = mid;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+		mid = left + (right - left) / 2;
+	}
+	return mid + 1;
+}
 int main()
 {
-	string s = "XXX";
-	int i = 1 - TEST4(1, 2)*TEST1(5, 6) * 2;
-	cout << i << endl;
-	system("pause");
+	vector<int> v;
 	return 0;
 }
