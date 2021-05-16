@@ -1,71 +1,82 @@
-////#include<iostream>
-////
-////using namespace std;
-////class Base {
-////public:
-////	void f() {
-////		cout << "Base\n";
-////	}
-////};
-////
-////class Derived :public Base {
-////public:
-////	void f() {
-////		cout << "Derived\n";
-////	}
-////};
-////
-////
-////using namespace std;
-////int main() {
-////	class student {
-////		int rno = 10;
-////	} v;
-////
-////	cout << v.rno;
-////}
-//////int main() {
-//////	Base *p = new Derived();  
-//////   
-//////	p->f();
-//////	system("pause");
-//////	return 0;
-//////}
-//#include<iostream>
+#include<iostream>
+#include<vector>
+using namespace std;
+//int j = 0;
+//int fun(int x ,vector<int>&v)
+//{
+//	int max = v[0];
+//	int min = v[0];
+//	int m = 0;
+//	int n = 0;
+//	for (int i = 0; i < x; i++)
+//	{
+//		if (v[i]>max)
+//		{
+//			max = v[i];
+//			n=i;
+//		}
+//	}
+//	for (int i = 0; i < x; i++)
+//	{
+//		if (v[i]<min)
+//		{
+//			min = v[i];
+//			m=i;
+//		}
+//	}
+//	//cout << max << endl;
+//	if ((max + min) % 2 == 0)
+//	{
+//		v[m] = (max + min) / 2;
+//		v[n] = (max + min) / 2;
+//	}
+//	else
+//	{
+//		v[m] = (max + min) / 2;
+//		v[n] = (max + min) / 2 + 1;
+//	}
+//	for (int i = 0; i < x-1; i++)
+//	{
+//		if (v[i] == v[i + 1])
+//		{
+//			return fun(x,v);
+//			j++;
+//			break;
+//		}
+//		else
+//		{
+//			cout << j << endl;
+//		}
+//	}
+//}
 //
-//using namespace std;
-//class Base {
-//public:
-//	void f() {
-//		cout << "Base\n";
+//int main()
+//{
+//	int x;
+//	cin >> x;
+//	vector<int>v;
+//	for (int i = 0; i < x; i++)
+//	{
+//		int u;
+//		cin >> u;
+//		v.push_back(u);
 //	}
-//};
-//class Derived :public Base {
-//public:
-//	void f() {
-//		cout << "Derived\n";
-//	}
-//};
-//int main() {
-//	Derived obj;
-//	obj.Base::f();
+//	fun(x,v);
 //	system("pause");
 //	return 0;
 //}
-#include<iostream>
 
-using namespace std;
-int main() {
-	int i;
-    char s[] = "hello";
+class A{
+public:
+	virtual void fun_1(){}
+	virtual void fun_2(){}
 
-    for (i = 0; s[i]; ++i);
-    cout << i << endl;
+};
+class B :public A{
 
-    i = 0;
-	cout << sizeof(s);
-    while (s[i++]);
-    cout << i;
-	system("pause");
+};
+int main()
+{
+	cout << sizeof(A) << endl;
 	return 0;
 }
