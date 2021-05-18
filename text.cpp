@@ -1,48 +1,107 @@
-//#include<iostream>
-//#include<vector>
-//#include<algorithm>
-//using namespace std;
-//
-//
-//
-//int knapsack(int n, int time, vector<int> &v, vector<int> &vc, vector<vector<int>> &res){
-//	for (int i = 1; i <= n; i++){//i个物品 
-//		for (int j = 1; j <= time; j++){//背包容量为j 
-//			if (v[i] > j){//当前背包的容量 j 放不下第 i 件商品时
-//				res[i][j] = res[i - 1][j];
-//			}
-//			else
-//			{
-//				res[i][j] = max(res[i - 1][j - v[i]] + vc[i], res[i - 1][j]);
-//			}
-//		}
-//	}
-//
-//	return res[n][time];
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<string>
+//#include <time.h>
+using namespace std;
+////int& Add(int a, int b) {
+////	int c = a + b;
+////	return c;
+////}
+///*int main()
+//{
+//	int& ret = Add(1, 2);
+//	Add(3, 4);
+//	cout << "Add(1, 2) is :" << ret << endl;
+//	system("pause");
+//	return 0;
+//}*/
+//struct A{ int a[10000]; };
+//void TestFunc1(A a){}
+//void TestFunc2(A& a){}
+//void TestRefAndValue()
+//{
+//	A a;
+//	// 以值作为函数参数
+//	size_t begin1 = clock();
+//	for (size_t i = 0; i < 10000; ++i)
+//		TestFunc1(a);
+//	size_t end1 = clock();
+//	// 以引用作为函数参数
+//	size_t begin2 = clock();
+//	for (size_t i = 0; i < 10000; ++i)
+//		TestFunc2(a);
+//	size_t end2 = clock();
+//	// 分别计算两个函数运行结束后的时间
+//	cout << "TestFunc1(A)-time:" << end1 - begin1 << endl;
+//	cout << "TestFunc2(A&)-time:" << end2 - begin2 << endl;
+//}
+////struct A{ int a[10000]; };
+////A a;
+////// 值返回
+////A TestFunc1() { return a; }
+////// 引用返回
+////A& TestFunc2(){ return a; }
+////void TestReturnByRefOrValue()
+////{
+////	// 以值作为函数的返回值类型
+////	size_t begin1 = clock();
+////	for (size_t i = 0; i < 100000; ++i)
+////		TestFunc1();
+////	size_t end1 = clock();
+////	// 以引用作为函数的返回值类型
+////	size_t begin2 = clock();
+////	for (size_t i = 0; i < 100000; ++i)
+////		TestFunc2();
+////	size_t end2 = clock();
+////	// 计算两个函数运算完成之后的时间
+////	cout << "TestFunc1 time:" << end1 - begin1 << endl;
+////	cout << "TestFunc2 time:" << end2 - begin2 << endl;
+////}
+////int main()
+////{
+////	TestRefAndValue();
+////	TestReturnByRefOrValue();
+////	system("pause");
+////	return 0;
+////}
+//int TestAuto()
+//{
+//	return 10;
 //}
 //int main()
 //{
-//	int n;
-//	cin >> n;
-//	vector<int> v;
-//	for (int i = 0; i < n; i++)
-//	{
-//		int x = 0;
-//		cin >> x;
-//		v.push_back(x);
-//	}
-//	vector<int> vc;
-//	for (int i = 0; i < n; i++)
-//	{
-//		int x = 0;
-//		cin >> x;
-//		vc.push_back(x);
-//	}
-//	int time;
-//	cin >> time;
-//	vector<vector<int>> res(n+1, vector<int>(time + 1), 0);
-//	knapsack(n, time, v, vc, res);
-//	cout << res[n][time] << endl;
+//	int a = 10;
+//	auto b = a;
+//	auto c = 'a';
+//	auto d = TestAuto();
+//
+//	cout << typeid(b).name() << endl;
+//	cout << typeid(c).name() << endl;
+//	cout << typeid(d).name() << endl;
+//
+//	//auto e; 无法通过编译，使用auto定义变量时必须对其进行初始化
 //	system("pause");
 //	return 0;
 //}
+class String
+{
+public:
+	String(const char* str = "jack")
+	{
+		_str = (char*)malloc(strlen(str) + 1);
+		strcpy(_str, str);
+	}
+	~String()
+	{
+		cout << "~String()" << endl;
+		free(_str);
+	}
+private:
+	char* _str;
+};
+int main()
+{
+	String s1("hello");
+	String s2 = s1;
+	return 0;
+}
