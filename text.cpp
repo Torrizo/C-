@@ -1,70 +1,105 @@
 #include<iostream>
+#include<algorithm>
+#include<vector>
+#include<list>
+#include<string>
 using namespace std;
-//class A {
-//public:
-//	A(int a)
-//		:_a1(a)
-//		, _a2(_a1)
-//	{}
-//
-//	void Print() {
-//		cout << _a1 << " " << _a2 << endl;
-//	}
-//private:
-//	int _a2;
-//	int _a1;
-//};
-//class A {
-//public:
-//	A() { ++_scount; }
-//	A(const A& t) { ++_scount; }
-//	static int GetACount() { return _scount; }
-//private:
-//	static int _scount;
-//};
-//int A::_scount = 0;
-//void TestA()
-//{
-//	cout << A::GetACount() << endl;
-//	A a1, a2;
-//	A a3(a1);
-//	cout << A::GetACount() << endl;
-//}
-class B {
-public:
-	B(int b = 0)
-		:_b(b)
-	{}
-	int _b;
-};
-class A {
-public:
-	void Print()
+
+void pingpang()
+{
+	int x;
+	cin >> x;
+	for (int i = 0; i < x; i++)
 	{
-		cout << a << endl;
-		cout << b._b << endl;
-		cout << p << endl;
+		vector<int> a;
+		vector<int> b;
+		for (int j = 0; j < 6; j++)
+		{
+			int z = 0;
+			int c = 0;
+			cin >> z;
+			cin >> c;
+			a.push_back(z);
+			b.push_back(c);
+		}
+		sort(a.begin(), a.end());
+		sort(b.begin(), b.end());
+		int n = 0;
+		int m = 0;
+		int u = 0;
+		int t = 0;
+
+		//for (int j = 0; j < 3; j++)
+		//{
+		//	int	q = 0;
+		//	int d = 0;
+		//    if(b[1] - a[j] - (b[0] - a[j])> 0)
+		//	{
+		//		q++;
+		//	}
+		//	else if (b[2] - a[j] - (b[1] - a[j])>0 || b[2] - a[j] - b[0] - a[j]> 0)
+		//	{
+		//		d++;
+		//	}
+		//	n = q*d;
+		//}
+		//for (int j = 0; j < 3; j++)
+		//{
+		//	int	q = 0;
+		//	int d = 0;
+		//	if (b[4] - a[j+3] - (b[3] - a[j+3])> 0)
+		//	{
+		//		q++;
+		//	}
+		//	else if (b[5] - a[j+3] - (b[4] - a[j+3])>0 || b[5] - a[j+3] - b[3] - a[j+3]> 0)
+		//	{
+		//		d++;
+		//	}
+		//	m = q*d;
+		//}
+		//for (int j = 0; j < 6; j++)
+		//{
+		//	int p = 0;
+		//	for (int k = 0; k < 6; k++)
+		//	{
+		//		if ((b[j] + b[k]) - (a[k] + a[j]) > 0)
+		//		{
+		//			p++;
+		//		}
+		//		u = p;
+		//	}
+		//}
+		//if (n == 0)
+		//{
+		//	t = u*m;
+		//	cout << t << endl;
+		//}
+		//else if (m == 0)
+		//{
+		//	t = u*n;
+		//	cout << t << endl;
+		//}
+		//else if (u == 0)
+		//{
+		//	t = m*n;
+		//	cout << t << endl;
+		//}
+		//else if (n == 0 && m == 0 || n == 0 && u == 0 || m == 0 && u == 0)
+		//{
+		//	t = 0;
+		//	cout << t << endl;
+		//}
+		//else 
+		//{
+		//	t = 0;
+		//	cout << t << endl;
+		//}
 	}
-private:
-	// 非静态成员变量，可以在成员声明时给缺省值。
-	int a = 10;
-	B b = 20;
-	int* p = (int*)malloc(4);
-	static int n;
-};
-int A::n = 10;
+}
+
 int main()
 {
-	A a;
-	a.Print();
+	pingpang();
 	system("pause");
 	return 0;
 }
-//int main() 
-//{
-//	/*A aa(1);
-//	aa.Print();*/
-//	TestA();
-//	system("pause");
-//	return 0;
-//}
