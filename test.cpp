@@ -1,24 +1,41 @@
 #include<iostream>
+//#include<list>
 using namespace std;
-int test()
-{
-	double v1, v2, c1, c2, s;
-	cin >> v1 >> v2 >> c1 >> c2 >> s;
-	double k, b, d ,f;
-	f = 8.34;
-	k = (c2 - c1) / (v2 - v1);
-	b = k*s / f;
-	d = (k*v1 - 2 * c1)*s / f - v1*v1;
-	cout << "k=" << k << " " << "b=" << b << " " << "d=" << d << " " << endl;
-	return k, b, d;
-}
+struct ListNode {
+	int val;
+	struct ListNode *next;
+	ListNode(int x) :
+		val(x), next(NULL) {
+	}
+};
+class Solution {
+public:
+	ListNode* ReverseList(ListNode* pHead) {
+		if (pHead == nullptr)
+		{
+			return nullptr;
+		}
+		ListNode* p_fast = pHead->next;
+		pHead->next = NULL;
+		while (p_fast != NULL)
+		{
+			ListNode* temp = p_fast->next;
+			p_fast->next = pHead;
+			pHead = p_fast;
+			p_fast = temp;
+		}
+		return pHead;
 
+	}
+};
+void test()
+{
+	
+}
 int main()
 {
-	while (1)
-	{
-		test();
-	}
-	system("pause");
+	
+	test();
+	system("pasue");
 	return 0;
 }
