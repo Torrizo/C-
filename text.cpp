@@ -1,71 +1,72 @@
-////#include<iostream>
-////
-////using namespace std;
-////class Base {
-////public:
-////	void f() {
-////		cout << "Base\n";
-////	}
-////};
-////
-////class Derived :public Base {
-////public:
-////	void f() {
-////		cout << "Derived\n";
-////	}
-////};
-////
-////
-////using namespace std;
-////int main() {
-////	class student {
-////		int rno = 10;
-////	} v;
-////
-////	cout << v.rno;
-////}
-//////int main() {
-//////	Base *p = new Derived();  
-//////   
-//////	p->f();
-//////	system("pause");
-//////	return 0;
-//////}
-//#include<iostream>
-//
-//using namespace std;
-//class Base {
-//public:
-//	void f() {
-//		cout << "Base\n";
+#include<iostream>
+#include<vector>
+#include<set>
+#include<queue>
+#include<string>
+using namespace std;
+//void kinghappy()
+//{
+//	int n, T;
+//	cin >> n >> T;
+//	queue<int> time;
+//	set<int> v;
+//	for (int i = 0; i < n; i++)
+//	{
+//		int x = 0;
+//		cin >> x;
+//		v.insert(x);
 //	}
-//};
-//class Derived :public Base {
-//public:
-//	void f() {
-//		cout << "Derived\n";
+//	for (int i = 0; i < n-1; i++)
+//	{
+//		int U, V;
+//		int x = 0;
+//		cin >> U >> V >> x;
+//		time.push(x);
 //	}
-//};
-//int main() {
-//	Derived obj;
-//	obj.Base::f();
+//	int c = 0;
+//	int i = -1;
+//	while (T >= 2*c)
+//	{
+//		c += time.front();
+//		time.pop();
+//		i++;
+//	}
+//	if (i>0)
+//	{
+//		set <int>::iterator it;
+//		vector<int>s;
+//		for (it = v.begin(); it != v.find(i); it++)
+//		{
+//			s.push_back(*it);
+//			//cout << *it << endl;
+//		}
+//		cout << s.back() << endl;
+//	}
+//	else
+//	{
+//		set <int>::iterator it;
+//		vector<int>s;
+//		for (it = v.begin(); it != v.find(2); it++)
+//		{
+//			s.push_back(*it);
+//			//cout << *it << endl;
+//		}
+//		cout << s.back() << endl;
+//	}
+//}
+//int main()
+//{
+//	kinghappy();
 //	system("pause");
 //	return 0;
 //}
-#include<iostream>
-
-using namespace std;
-int main() {
-	int i;
-    char s[] = "hello";
-
-    for (i = 0; s[i]; ++i);
-    cout << i << endl;
-
-    i = 0;
-	cout << sizeof(s);
-    while (s[i++]);
-    cout << i;
+int main()
+{
+	vector<char> v;
+	char x;
+	v.push_back(x);
+	cin >> x;
+	for
 	system("pause");
 	return 0;
 }
